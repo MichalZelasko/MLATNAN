@@ -6,10 +6,6 @@ curl --create-dirs https://s3.amazonaws.com/openneuro.org/ds000030/sub-10159/dwi
 export FSLOUTPUTTYPE=NIFTI_GZ
 export PATH="/usr/local/fsl/bin$PATH"
 export FSLDIR="/usr/local/fsl"
-eddy_correct ./sub-10159/dwi/sub-10159_dwi.nii.gz  ./sub-10159/dwi/sub-10159_dwi_eddycorrected.nii.gz -interp trilinear
-3drefit -deoblique ./sub-10159/dwi/sub-10159_dwi.nii.gz
-3dresample -orient RPI -inset sub-10159/dwi/sub-10159_dwi.nii.gz -prefix ./sub-10159/dwi/sub-10159_dwi_ro.nii.gz
-bet ./sub-10159/dwi/sub-10159_dwi_ro.nii.gz brain.nii.gz -m -R -f 0.4
-fslmaths ./sub-10159/dwi/sub-10159_dwi_eddycorrected.nii.gz ./sub-10159/dwi/sub-10159_dwi_bet.nii.gz
+fslmaths ./sub-10159/dwi/sub-10159_dwi.nii.gz ./sub-10159/dwi/sub-10159_dwi_bet.nii.gz
 flirt -ref ./sub-10159/dwi/sub-10159_dwi_bet.nii.gz -in  ./atlas/MNI152lin_T1_1mm_brain.nii.gz -omat ./atlas/my_mat.mat
-flirt -ref ./sub-10159/dwi/sub-10159_dwi_bet.nii.gz -in  ./atlas/aal.nii -applyxfm -init my_mat.mat -out ./atlas/atlas_reg.nii.gz -interp nearestneighbour
+flirt -ref ./sub-10159/dwi/sub-10159_dwi_bet.nii.gz -in  ./atlas/aal.nii -applyxfm -init ./atlas/my_mat.mat -out ./atlas/atlas_reg.nii.gz -interp nearestneighbour
